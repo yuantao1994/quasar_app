@@ -12,6 +12,9 @@
 
     <q-page>
       <q-btn color="primary" label="模拟请求" @click="dialog"/>
+      <q-btn color="primary" label="选择图片" @click="openImg"/>
+      {{src}}
+      <img src="http://www.quasarchs.com/images/quasar-logo.png" width="200" height="200">
       {{user.name}}
       api result: {{result}}
     </q-page>
@@ -20,11 +23,14 @@
 
 <script>
 import { mapGetters, mapState, mapActions } from 'vuex'
+import ImagePickerPlugins from 'app/src/plugins/imagePickerPlugins'
+
 export default {
   name: 'detailsTest',
   data() {
     return {
-      result: ''
+      result: '',
+      src: ''
     };
   },
   computed: {
@@ -42,9 +48,23 @@ export default {
       this.result = s
       this.$q.dialog({
         title: 'Warning',
-        message: "message"
+        message: 'message'
+      })
+    },
+
+    openImg() {
+      ImagePickerPlugins.getPictures().then(v => {
+        console.log('success:' + JSON.stringify(v))
+        this.src = v[0]
+        this.src = 'http://www.quasarchs.com/images/quasar-logo.png'
+      }).catch(e => {
+        this.$q.dialog({
+          title: 'error',
+          message: e
+        })
       })
     }
+
   },
   mounted() { }
 };
