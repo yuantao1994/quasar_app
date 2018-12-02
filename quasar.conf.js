@@ -19,6 +19,7 @@ module.exports = function(ctx) {
       // vueCompiler: true,
       //  gzip: true,
       // analyze: true,
+      //   publicPath: '/',
       extractCSS: true,
       extendWebpack(cfg) {}
     },

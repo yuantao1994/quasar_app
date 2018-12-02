@@ -14,7 +14,8 @@
       <q-btn color="primary" label="模拟请求" @click="dialog"/>
       <q-btn color="primary" label="选择图片" @click="openImg"/>
       {{src}}
-      <img src="http://www.quasarchs.com/images/quasar-logo.png" width="200" height="200">
+      <img :src="src" width="200" height="200">
+      <img id="simg" width="200" height="200">
       {{user.name}}
       api result: {{result}}
     </q-page>
@@ -30,7 +31,7 @@ export default {
   data() {
     return {
       result: '',
-      src: ''
+      src: '#'
     };
   },
   computed: {
@@ -55,8 +56,12 @@ export default {
     openImg() {
       ImagePickerPlugins.getPictures().then(v => {
         console.log('success:' + JSON.stringify(v))
-        this.src = v[0]
-        this.src = 'http://www.quasarchs.com/images/quasar-logo.png'
+        this.src = 'file://' + v[0]
+        //  this.src = 'http://www.quasarchs.com/images/quasar-logo.png'
+        alert(this.src)
+        let simg = document.getElementById('simg')
+        simg.src = v[0]
+        alert(simg.src)
       }).catch(e => {
         this.$q.dialog({
           title: 'error',
