@@ -12,7 +12,7 @@
    
    ## 项目结构
   ~~~
-  ├── src/
+├── src/
 │   ├── assets/              # 动态资源（由webpack处理）
 │   ├── statics/             # 纯静态资源（直接复制）
 │   ├── components/          # 用于页面和布局的.vue组件
