@@ -304,31 +304,4 @@ export default class HttpClent {
       })
     }
   }
-
-  /**
-   * 文件上传
-   * @param {*} url 上传地址
-   * @param {*} data 数据
-   * @param {*} filepath 文件本地路径
-   */
-  static uploadFile(url, data, filepath) {
-    return new Promise((resolve, reject) => {
-      cordova.plugin.http.uploadFile(
-        url,
-        data,
-        { Authorization: 'OAuth2: token' },
-        filepath,
-        'filename',
-        response => {
-          console.log(response.status)
-          // TODO 处理数据
-          resolve(response)
-        },
-        response => {
-          console.error(response.error)
-          reject(response)
-        }
-      )
-    })
-  }
 }
