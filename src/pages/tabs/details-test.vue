@@ -14,7 +14,7 @@
       <q-btn color="primary" label="模拟请求" @click="dialog"/>
       <q-btn color="primary" label="选择图片" @click="openImg"/>
       {{src}}
-      <img :src="src" width="200" height="200">
+      <img v-for="src in srcs" :key="src" :src="src" width="200" height="200">
       {{user.name}}
       api result: {{result}}
     </q-page>
@@ -30,7 +30,7 @@ export default {
   data() {
     return {
       result: '',
-      src: '#'
+      srcs: []
     };
   },
   computed: {
@@ -44,23 +44,30 @@ export default {
       this.$router.go(-1);
     },
     async dialog() {
-      let s = await this.login()
-      this.result = s
-      this.$q.dialog({
-        title: 'Warning',
-        message: 'message'
-      })
-    },
-
-    openImg() {
-      ImagePickerPlugins.getPictures().then(v => {
-        this.src = v[0]
-      }).catch(e => {
+      try {
+        this.result = await this.login()
+        this.$q.dialog({
+          title: 'Success',
+          message: 'ok'
+        })
+      } catch (error) {
         this.$q.dialog({
           title: 'error',
-          message: e
+          message: 'error'
         })
-      })
+      }
+
+    },
+
+    async  openImg() {
+      try {
+        this.srcs = await ImagePickerPlugins.getPictures()
+      } catch (error) {
+        this.$q.dialog({
+          title: 'error',
+          message: error
+        })
+      }
     }
 
   },

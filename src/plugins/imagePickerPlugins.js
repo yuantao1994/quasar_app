@@ -31,7 +31,7 @@ export default class ImagePickerPlugins {
    * @returns 返回一个图片路径数组
    * @memberof ImagePickerPlugins
    */
-  static getPictures(pickerOptions) {
+  static async getPictures(pickerOptions) {
     let _options = _extend(options, pickerOptions)
     console.log('选择多个文件' + JSON.stringify(_options))
     return new Promise((resolve, reject) => {

@@ -8,7 +8,6 @@ const stroiesUrl = 'http://news-at.zhihu.com/api/4/news/latest'
 const storyDetailUrl = 'http://news-at.zhihu.com/api/4/news/'
 const beforeNewsUrl = 'http://news-at.zhihu.com/api/4/news/before/'
 
-
 const getters = {}
 
 const mutations = {}
@@ -21,19 +20,15 @@ const actions = {
    * @returns
    */
   async getStories({ commit }) {
-    return new Promise((resolve, reject) => {
-      httpClent
-        .get(stroiesUrl, {}, true)
-        .then(res => {
-          for (let item of res.stories) {
-            item.images[0] = 'https://images.weserv.nl/?url=' + item.images[0] // 解决图片403 ，会导致图片加载慢
-          }
-          resolve(res)
-        })
-        .catch(e => {
-          reject(e)
-        })
-    })
+    try {
+      let res = await httpClent.get(stroiesUrl, {}, true)
+      for (let item of res.stories) {
+        item.images[0] = 'https://images.weserv.nl/?url=' + item.images[0] // 解决图片403 ，会导致图片加载慢
+      }
+      return Promise.resolve(res)
+    } catch (error) {
+      return Promise.reject(error)
+    }
   },
 
   /**
@@ -44,26 +39,18 @@ const actions = {
    * @returns
    */
   async getStroy({ commit }, id) {
-    return new Promise((resolve, reject) => {
-      httpClent
-        .get(storyDetailUrl + id, {}, true)
-        .then(res => {
-          // 解决图片403 ，会导致图片加载慢
-          res.image = 'https://images.weserv.nl/?url=' + res.image
-          res.body = res.body.replace(
-            /http:\/\//g,
-            'https://images.weserv.nl/?url='
-          )
-          resolve(res)
-        })
-        .catch(e => {
-          reject(e)
-        })
-    })
+    try {
+      let res = await httpClent.get(storyDetailUrl + id, {}, true)
+      res.image = 'https://images.weserv.nl/?url=' + res.image
+      res.body = res.body.replace(
+        /http:\/\//g,
+        'https://images.weserv.nl/?url='
+      )
+      return Promise.resolve(res)
+    } catch (error) {
+      return Promise.reject(error)
+    }
   },
-
-  
-
 
   /**
    *  获取以往新闻
@@ -71,19 +58,15 @@ const actions = {
    * @param {*} date
    */
   async getBeforeNews({ commit }, date) {
-    return new Promise((resolve, reject) => {
-      httpClent
-        .get(beforeNewsUrl + date, {}, false)
-        .then(res => {
-          for (let item of res.stories) {
-            item.images[0] = 'https://images.weserv.nl/?url=' + item.images[0] // 解决图片403 ，会导致图片加载慢
-          }
-          resolve(res)
-        })
-        .catch(e => {
-          reject(e)
-        })
-    })
+    try {
+      let res = await httpClent.get(beforeNewsUrl + date, {}, false)
+      for (let item of res.stories) {
+        item.images[0] = 'https://images.weserv.nl/?url=' + item.images[0] // 解决图片403 ，会导致图片加载慢
+      }
+      return Promise.resolve(res)
+    } catch (error) {
+      return Promise.reject(error)
+    }
   }
 }
 

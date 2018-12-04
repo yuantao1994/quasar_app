@@ -17,20 +17,20 @@ const mutations = {
 
 const actions = {
   async login({ commit }, params) {
-    return new Promise((resolve, reject) => {
-      httpClent
-        .get(config.apiBase + '/axios/axios', params, true)
-        .then(res => {
-          commit({
-            type: 'setUser',
-            user: { phone: '1111', name: 'tes11' } // TODO
-          })
-          resolve(res)
-        })
-        .catch(e => {
-          reject(e)
-        })
-    })
+    try {
+      let res = await httpClent.get(
+        config.apiBase + '/axios/axios',
+        params,
+        true
+      )
+      commit({
+        type: 'setUser',
+        user: { phone: '1111', name: 'tes11' } // TODO
+      })
+      return Promise.resolve(res)
+    } catch (error) {
+      return Promise.reject(error)
+    }
   }
 }
 
