@@ -6,7 +6,7 @@
         <q-btn flat dense round aria-label="arrow_back_ios" @click="back">
           <q-icon name="arrow_back_ios"/>
         </q-btn>
-        <q-toolbar-title>Details</q-toolbar-title>
+        <q-toolbar-title>插件测试</q-toolbar-title>
       </q-toolbar>
     </q-layout-header>
 
