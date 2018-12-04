@@ -138,15 +138,21 @@ function handlerSuccessResponse(response) {
   }
   return new Promise((resolve, reject) => {
     try {
-      let data = JSON.parse(response.data)
-      console.log(response.data.message)
-      resolve(data)
+      if (response.data instanceof Object) {
+        resolve(response.data)
+      } else {
+        let data = JSON.parse(response.data)
+        console.log(response.data.message)
+        resolve(data)
+      }
     } catch (e) {
       console.error('JSON parsing error')
       resolve(response.data)
     }
   })
 }
+
+let isDialog = false
 
 function handlerFailResponse(response) {
   if (Loading.isActive) {
@@ -197,11 +203,15 @@ function handlerFailResponse(response) {
           msg = `连接错误${response.status}`
       }
     }
-    Dialog.create({
-      title: '提示',
-      message: msg,
-      ok: '确定'
-    })
+    if (!isDialog)
+      Dialog.create({
+        title: '提示',
+        message: msg,
+        ok: '确定'
+      }).then(e => {
+        isDialog = false
+      })
+    isDialog = true
     reject(msg)
   })
 }

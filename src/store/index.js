@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import users from './module/users'
+import news  from './module/zhihu/stroy'
+
 Vue.use(Vuex)
 
 /*
@@ -9,7 +11,7 @@ Vue.use(Vuex)
  */
 
 const store = new Vuex.Store({
-  modules: { users }
+  modules: { users, news }
 })
 
 store.registerModule('vux', {

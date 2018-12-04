@@ -52,7 +52,10 @@ module.exports = function(ctx) {
         'QTab',
         'QRouteTab',
         'QItemSeparator',
-        'QItemTile'
+        'QItemTile',
+        'QInfiniteScroll',
+        'QSpinnerDots',
+        'QPullToRefresh'
       ],
       directives: ['Ripple'],
       // Quasar plugins

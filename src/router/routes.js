@@ -32,6 +32,16 @@ const routes = [
         path: 'input1',
         name: 'input1',
         component: () => import('pages/tabs/input-test.vue')
+      },
+      {
+        path: 'news',
+        name: 'news',
+        component: () => import('pages/zhihu/news-list.vue')
+      },
+      {
+        path: 'newsDetials/:id',
+        name: 'newsDetials',
+        component: () => import('pages/zhihu/news-detials.vue')
       }
     ]
   }
