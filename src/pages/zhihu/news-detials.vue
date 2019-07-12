@@ -1,19 +1,19 @@
 <template>
   <q-page-container>
-    <q-layout-header>
+    <q-header>
       <q-toolbar color="primary" :glossy="$q.theme === 'mat'" :inverted="$q.theme === 'ios'">
         <q-btn flat dense round aria-label="arrow_back_ios" @click="$router.back()">
-          <q-icon name="arrow_back_ios"/>
+          <q-icon name="arrow_back_ios" />
         </q-btn>
         <q-toolbar-title>{{details.title}}</q-toolbar-title>
       </q-toolbar>
-    </q-layout-header>
+    </q-header>
     <q-page v-if="details.type==0">
-      <img :src="details.image" width="100%">
+      <img :src="details.image" width="100%" />
       <div v-html="details.body"></div>
     </q-page>
     <q-page v-if="details.type==1" v-html="otherBody"></q-page>
-    <link v-for="item of details.css" :key="item" :href="item" rel="stylesheet">
+    <link v-for="item of details.css" :key="item" :href="item" rel="stylesheet" />
   </q-page-container>
 </template>
 

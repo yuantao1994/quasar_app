@@ -10,8 +10,11 @@
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
+    "@quasar/app": "^1.0.4",
+    "@quasar/extras": "^1.1.4",
     "axios": "^0.18.0",
-    "fastclick": "^1.0.6"
+    "fastclick": "^1.0.6",
+    "quasar": "^1.0.4"
   },
   "devDependencies": {
     "quasar-cli": "^0.17.0",
