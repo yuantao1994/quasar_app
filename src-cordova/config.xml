@@ -1,5 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="org.cordova.quasar.app" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="org.cordova.quasar.app" version="1.0.0" 
+    xmlns="http://www.w3.org/ns/widgets" 
+    xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>parking</name>
     <description>parking app </description>
     <author email="dev@cordova.apache.org" href="http://cordova.io">
@@ -88,5 +90,13 @@
     <plugin name="cordova-android-support-gradle-release" spec="2.0.1">
         <variable name="ANDROID_SUPPORT_VERSION" value="27.+" />
     </plugin>
+    <plugin name="cordova-hot-code-push-plugin" spec="^1.5.3" />
+
+    <chcp>
+        <auto-download enabled="true" />
+        <auto-install enabled="true" />
+        <native-interface version="1" />
+        <config-file url="https://xx.xx.com/xx/chcp.json" />
+    </chcp>
     <engine name="android" spec="^7.1.4" />
 </widget>

@@ -12,7 +12,18 @@ cordova 基础插件已经添加，包括相机、图库、文件等
  #  手机运行（自行安装cordova环境、配置Android或iOS）
  1. quasar mode -a cordova
  2. quasar dev -m cordova -T android -t ios # 在手机上本地调试
+ 3. 使用 quasar build -m cordova -T android -t ios 命令生成并签名
+ 4. 如果app使用热更新(apk) 请先执行cordova-hcp build命令 然后执行cordova build --release android 命令
+
 ```
+
+## 热更新
+
+1. 安装 npm install -g cordova-hot-code-push-cli
+2. 修改 config.xml 和 cordova-hcp.json 中服务器地址
+3. 执行 quasar build -m cordova -T android -t ios
+4. 在 cordova 项目中执行 cordova-hcp build
+5. 将 cordova 项目下的 www 文件夹放到服务器中
 
 ## 项目结构
 
