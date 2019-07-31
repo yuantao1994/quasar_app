@@ -2,12 +2,13 @@
 import axios from 'axios'
 import {
     Dialog,
-    Platform
-} from 'quasar'
-import {
+    Platform,
     Loading,
     QSpinnerTail
 } from 'quasar'
+
+let requestNum = 0;
+
 
 function loading() {
     Loading.show({
@@ -16,132 +17,14 @@ function loading() {
         delay: 400
     })
 }
-
-//请求拦截器
-axios.interceptors.request.use(
-    config => {
-        if (config.isload) {
-            loading()
-        }
-        if (config.url.indexOf('login') == -1) {
-            // 非登录请求添加token
-            config.headers['Authorization'] = 'Bearer ' + 'token' // TODO
-        }
-
-        return config
-    },
-    error => {
-        return Promise.reject(error)
-    }
-)
-
-//#region  注释axios 基础配置
-
-/*
-
-//设置默认请求头
-axios.defaults.headers = {
-  'X-Requested-With': 'XMLHttpRequest'
-}
-axios.defaults.timeout = 10000
-
-axios.defaults.baseURL = config.apiBase // TODO
-//设置默认请求头
-axios.defaults.headers = {
-  'X-Requested-With': 'XMLHttpRequest'
-}
-axios.defaults.timeout = 10000
-//请求拦截器
-axios.interceptors.request.use(
-  config => {
-    if (config.isload) {
-      loading()
-    }
-    if (config.url.indexOf('login') == -1) {
-      // 非登录请求添加token
-      config.headers['Authorization'] = 'Bearer ' + 'token' // TODO
-    }
-
-    return config
-  },
-  error => {
-    return Promise.reject(error)
-  }
-)
-
-//响应拦截器即异常处理
-axios.interceptors.response.use(
-  response => {
-    if (response.config.isload) {
-      Loading.hide()
-    }
-    return response
-  },
-  err => {
-    if (err.config.isload) {
-      Loading.hide()
-    }
-    if (err && err.response) {
-      switch (err.response.status) {
-        case 400:
-          err.message = '错误请求'
-          break
-        case 401:
-          err.message = '未授权，请重新登录'
-          break
-        case 403:
-          err.message = '拒绝访问'
-          break
-        case 404:
-          err.message = '请求错误,未找到该资源'
-          break
-        case 405:
-          err.message = '请求方法未允许'
-          break
-        case 408:
-          err.message = '请求超时'
-          break
-        case 500:
-          err.message = '服务器端出错'
-          break
-        case 501:
-          err.message = '网络未实现'
-          break
-        case 502:
-          err.message = '网络错误'
-          break
-        case 503:
-          err.message = '服务不可用'
-          break
-        case 504:
-          err.message = '网络超时'
-          break
-        case 505:
-          err.message = 'http版本不支持该请求'
-          break
-        default:
-          err.message = `连接错误${err.response.status}`
-      }
-    } else {
-      err.message = '连接到服务器失败'
-    }
-    console.error(err)
-    Dialog.create({
-      title: '提示',
-      message: err.message,
-      ok: '确定'
-    })
-    return Promise.reject(err.message)
-  }
-) */
-
-//#endregion
+axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 function handlerSuccessResponse(response) {
     console.log('处理state==200的请求', response)
-    if (Loading.isActive) {
+    if (Loading.isActive && requestNum == 1) {
         Loading.hide()
     }
+    requestNum--
     return new Promise((resolve, reject) => {
         try {
             if (response.data instanceof Object) {
@@ -153,7 +36,7 @@ function handlerSuccessResponse(response) {
             }
         } catch (e) {
             console.error('JSON parsing error')
-            resolve(response.data)
+            reject(response.data)
         }
     })
 }
@@ -161,9 +44,10 @@ function handlerSuccessResponse(response) {
 let isDialog = false
 
 function handlerFailResponse(response) {
-    if (Loading.isActive) {
+    if (Loading.isActive && requestNum == 1) {
         Loading.hide()
     }
+    requestNum--
     console.log('处理state!=200的请求', response)
     return new Promise((resolve, reject) => {
         let msg = '连接错误'
@@ -228,17 +112,17 @@ export default class HttpClent {
      * get 请求
      * @static
      * @param {*} url 请求地址
-     * @param {*} param 数据
+     * @param {*} params 数据
      * @param {*} isload 是否显示loading 效果
      * @returns
      * @memberof HttpClent
      */
-    static async get(url, param, isload) {
+    static async get(url, params, isload) {
         if (isload) {
             loading()
         }
         try {
-            const response = await this.sendRequest(url, param, 'get')
+            const response = await this.sendRequest(url, null, params, 'get')
             return handlerSuccessResponse(response)
         } catch (error) {
             return handlerFailResponse(error)
@@ -250,17 +134,17 @@ export default class HttpClent {
      * post请求
      * @static
      * @param {*} url 请求地址
-     * @param {*} param 数据
+     * @param {*} data 数据
      * @param {*} isload 是否显示loading 效果
      * @returns
      * @memberof HttpClent
      */
-    static async post(url, param, isload) {
+    static async post(url, data, isload) {
         if (isload) {
             loading()
         }
         try {
-            const response = await this.sendRequest(url, param, 'post')
+            const response = await this.sendRequest(url, data, null, 'post')
             return handlerSuccessResponse(response)
         } catch (error) {
             return handlerFailResponse(error)
@@ -277,15 +161,19 @@ export default class HttpClent {
      * @returns
      * @memberof HttpClent
      */
-    static sendRequest(url, data, method) {
+    static sendRequest(url, data, params, method) {
+        requestNum++;
         const options = {
+            url: url,
             method: method,
             data: data,
+            params: params,
             headers: {
                 Authorization: 'OAuth2: token'
             } // 非登录请求添加token TODO
         }
         if (Platform.is.cordova && cordova.plugin.http) {
+            cordova.plugin.http.setDataSerializer('json');
             return new Promise((resolve, reject) => {
                 cordova.plugin.http.sendRequest(
                     url,
@@ -306,11 +194,7 @@ export default class HttpClent {
             })
         } else {
             return new Promise((resolve, reject) => {
-                axios({
-                        method: method,
-                        url,
-                        data: data
-                    })
+                axios(options)
                     .then(response => {
                         console.log(response, 'success')
                         resolve(response)
