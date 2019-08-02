@@ -9,47 +9,39 @@
       </q-toolbar>
     </q-header>
     <q-pull-to-refresh @refresh="refresher">
-      <q-page class="scroll_box">
-        <q-infinite-scroll @load="loadMore" ref="infiniteScroll">
-          <q-list highlight inset-separator>
-            <q-item-label header>今天</q-item-label>
-            <q-item
-              multiline
-              v-for="news in newsList.stories"
-              :key="news.id"
-              :to="'newsDetials/'+news.id"
-            >
-              <q-item-section top thumbnail class="q-ml-none">
-                <img :src="news.images[0]" />
-              </q-item-section>
-              <q-item-section>
-                <q-item-label>{{news.title}}</q-item-label>
-              </q-item-section>
-            </q-item>
-          </q-list>
+      <q-page>
+        <div ref="scrollTargetRef" class="scroll_box" style="max-height: 1350px; overflow: auto;">
+          <q-infinite-scroll @load="loadMore" :offset="0" :scroll-target="$refs.scrollTargetRef">
+            <q-list padding bordered>
+              <q-item-label header>今天</q-item-label>
+              <q-item v-for="news in newsList.stories" :key="news.id" :to="'newsDetials/'+news.id">
+                <q-item-section top thumbnail style="margin-left: 10px" class="q-ml-none">
+                  <img :src="news.images[0]" />
+                </q-item-section>
+                <q-item-section>
+                  <q-item-label>{{news.title}}</q-item-label>
+                </q-item-section>
+              </q-item>
+            </q-list>
 
-          <q-list highlight inset-separator v-for="item in datas" :key="item.date">
-            <q-item-label header>{{item.date}}</q-item-label>
-            <q-item
-              multiline
-              v-for="news in item.stories"
-              :key="news.id"
-              :to="'newsDetials/'+news.id"
-            >
-              <q-item-section top thumbnail class="q-ml-none">
-                <img :src="news.images[0]" />
-              </q-item-section>
+            <q-list bordered padding v-for="item in datas" :key="item.date">
+              <q-item-label header>{{item.date}}</q-item-label>
+              <q-item v-for="news in item.stories" :key="news.id" :to="'newsDetials/'+news.id">
+                <q-item-section top thumbnail style="margin-left: 10px" class="q-ml-none">
+                  <img :src="news.images[0]" />
+                </q-item-section>
 
-              <q-item-section>
-                <q-item-label>{{news.title}}</q-item-label>
-              </q-item-section>
-            </q-item>
-          </q-list>
+                <q-item-section>
+                  <q-item-label>{{news.title}}</q-item-label>
+                </q-item-section>
+              </q-item>
+            </q-list>
 
-          <div class="row justify-center" style="margin-bottom: 50px;">
-            <q-spinner-dots slot="message" :size="40" />
-          </div>
-        </q-infinite-scroll>
+            <div class="row justify-center" style="margin-bottom: 50px;">
+              <q-spinner-dots slot="message" :size="40" />
+            </div>
+          </q-infinite-scroll>
+        </div>
       </q-page>
     </q-pull-to-refresh>
   </q-page-container>
