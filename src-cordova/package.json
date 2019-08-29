@@ -25,9 +25,6 @@
     "cordova": {
         "plugins": {
             "cordova-plugin-whitelist": {},
-            "cordova-plugin-advanced-http": {
-                "OKHTTP_VERSION": "3.10.0"
-            },
             "cordova-plugin-device": {},
             "cordova-plugin-splashscreen": {},
             "cordova-plugin-file-transfer": {},
@@ -36,7 +33,10 @@
             },
             "cordova-hot-code-push-plugin": {},
             "cordova-plugin-imagepicker": {},
-            "cordova-plugin-statusbar": {}
+            "cordova-plugin-statusbar": {},
+            "cordova-plugin-advanced-http": {
+                "OKHTTP_VERSION": "3.10.0"
+            }
         },
         "platforms": [
             "android"
