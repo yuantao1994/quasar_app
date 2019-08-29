@@ -1,23 +1,38 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= htmlWebpackPlugin.options.productName %></title>
+
+<head>
+    <title>
+        <%= htmlWebpackPlugin.options.productName %>
+    </title>
     <meta charset="utf-8" />
-    <meta
-      name="description"
-      content="<%= htmlWebpackPlugin.options.productDescription %>"
-    />
+    <meta name="description" content="<%= htmlWebpackPlugin.options.productDescription %>" />
     <meta name="format-detection" content="telephone=no" />
     <meta name="msapplication-tap-highlight" content="no" />
-    <meta
+    <!--  <meta
       name="viewport"
       content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width<% if (htmlWebpackPlugin.options.ctx.mode.cordova) { %>, viewport-fit=cover<% } %>"
-    />
+    /> -->
+    <meta name="viewport" content="initial-scale=1,user-scalable=no, width=device-width, height=device-height, viewport-fit=cover">
     <script src="statics/config/baseconfig.js"></script>
     <link rel="icon" href="statics/quasar-logo.png" type="image/x-icon" />
-  </head>
-  <body>
+</head>
+
+<body>
     <!-- DO NOT touch the following DIV -->
     <div id="q-app"></div>
-  </body>
+</body>
+
 </html>
+
+<style>
+    .fixed-top {
+        padding-top: constant(safe-area-inset-top);
+        padding-top: env(safe-area-inset-top);
+    }
+    
+    .fixed-bottom {
+        padding-bottom: constant(safe-area-inset-bottom);
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+</style>
