@@ -75,7 +75,7 @@
     <q-page-container>
       <router-view />
     </q-page-container>
-    <q-footer>
+    <q-footer class="fixed-bottom">
       <q-tabs>
         <q-tab name="mails" icon="mail" label="Mails" />
         <q-tab name="alarms" icon="alarm" label="Alarms" />

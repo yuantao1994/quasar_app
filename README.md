@@ -16,6 +16,7 @@ cordova 基础插件已经添加，包括相机、图库、文件等
  4. 如果app使用热更新(apk) 请先执行cordova-hcp build命令 然后执行cordova build --release android 命令
 
 ```
+quasar build -m cordova -T ios -t ios
 
 ## 热更新
 
