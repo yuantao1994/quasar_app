@@ -8,21 +8,21 @@ cordova 基础插件已经添加，包括相机、图库、文件等
 ```
  # 本地浏览器运行
  1. npm install
- 2. quasar dev -t ios
+ 2. quasar dev
  #  手机运行（自行安装cordova环境、配置Android或iOS）
  1. quasar mode -a cordova
- 2. quasar dev -m cordova -T android -t ios # 在手机上本地调试
- 3. 使用 quasar build -m cordova -T android -t ios 命令生成并签名
+ 2. quasar dev -m cordova -T android # 在手机上本地调试
+ 3. 使用 quasar build -m cordova -T android  命令生成并签名
  4. 如果app使用热更新(apk) 请先执行cordova-hcp build命令 然后执行cordova build --release android 命令
 
 ```
-quasar build -m cordova -T ios -t ios
+quasar build -m cordova -T ios 
 
 ## 热更新
 
 1. 安装 npm install -g cordova-hot-code-push-cli
 2. 修改 config.xml 和 cordova-hcp.json 中服务器地址
-3. 执行 quasar build -m cordova -T android -t ios
+3. 执行 quasar build -m cordova -T android 
 4. 在 cordova 项目中执行 cordova-hcp build
 5. 将 cordova 项目下的 www 文件夹放到服务器中
 
@@ -55,8 +55,6 @@ quasar build -m cordova -T ios -t ios
 │   └── index.template.html   # index.html模板
 ├── src-cordova/               # Cordova生成的文件夹用于创建移动APP
 ├── dist/                      # 生产版本代码，用于部署
-│   ├── spa-mat/              # 使用MAT主题构建SPA应用生产代码
-│   ├── spa-ios/              # 使用IOS主题构建SPA应用生产代码
 ├── quasar.conf.js           # Quasar App配置文件
 ├── .babelrc                 # babel配置
 ├── .editorconfig            # editor配置
@@ -125,7 +123,7 @@ ImagePickerPlugins.getPictures().then(v => {
 1. 浏览器中调试
    通用调试方法
 2. 手机上面调试
-   需要安装 Android SDK ，运行 quasar dev -m cordova -T android -t ios；手机和电脑在同一个局域网内，可以通过 alert 调试，或者使用 Android Studio 查看输入（在 js 中使用 console.error/等方法）。
+   需要安装 Android SDK ，运行 quasar dev -m cordova -T android；手机和电脑在同一个局域网内，可以通过 alert 调试，或者使用 Android Studio 查看输入（在 js 中使用 console.error/等方法）。
 
 ### 其他
 
