@@ -3,7 +3,7 @@
 module.exports = function(ctx) {
     return {
         // app boot (/src/boot)
-        boot: [],
+        boot: ['third-components'],
         css: ['app.styl'],
         extras: [
             'roboto-font',

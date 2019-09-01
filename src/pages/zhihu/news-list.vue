@@ -33,7 +33,11 @@
             </q-item-section>
           </q-item>
         </q-list>
-        <infinite-loading @infinite="infiniteHandler" ref="infiniteLoading">
+        <infinite-loading
+          @infinite="infiniteHandler"
+          :identifier="infiniteId"
+          ref="infiniteLoading"
+        >
           <div slot="spinner" class="row justify-center q-my-md">
             <q-spinner-dots color="primary" size="40px" />
           </div>
@@ -52,7 +56,8 @@ export default {
     return {
       page: 0,
       newsList: {},
-      datas: []
+      datas: [],
+      infiniteId: 1
     };
   },
   computed: {
@@ -89,9 +94,10 @@ export default {
      */
     resetData() {
       this.datas = [];
-      this.$nextTick(() => {
+      this.infiniteId += 1;
+      /*  this.$nextTick(() => {
         this.$refs.infiniteLoading.$emit("$InfiniteLoading:reset");
-      });
+      }); */
     },
 
     /**
