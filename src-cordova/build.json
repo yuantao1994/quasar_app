@@ -1,10 +1,10 @@
 {
     "android": {
         "release": {
-            "keystore": "org.cordova.quasar.app",
+            "keystore": "org.cordova.quasar.app.keystore",
             "alias": "org.cordova.quasar.app",
-            "storePassword": "12",
-            "password": "12"
+            "storePassword": "yk1234",
+            "password": "yk1234"
         }
     }
 }

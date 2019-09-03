@@ -1,8 +1,8 @@
 
 <template>
   <q-page>
-    <q-btn color="primary" label="插件测试" @click="gotest"/>
-    <q-btn color="primary" label="知乎日报" @click="gozhihu"/>
+    <q-btn color="primary" label="插件测试1" @click="gotest" />
+    <q-btn color="primary" label="知乎日报1" @click="gozhihu" />
   </q-page>
 </template>
 

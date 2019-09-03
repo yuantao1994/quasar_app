@@ -1,19 +1,30 @@
 <template>
   <div id="q-app">
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
 <script>
 import exitApp from './plugins/exitAppServices'
+import { Platform } from 'quasar'
+
 export default {
   name: 'App',
   mounted() {
-    document.addEventListener('backbutton', exitApp, false)
+
+    if (Platform.is.cordova) {
+      document.addEventListener('backbutton', exitApp, false)
+
+      document.addEventListener('deviceready', function () {
+        codePush.sync()
+      }, false)
+      document.addEventListener("resume", function () {
+        codePush.sync()
+      }, false)
+    }
   }
 }
 </script>
-
 <style>
 * {
   -webkit-touch-callout: none;

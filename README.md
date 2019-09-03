@@ -13,18 +13,102 @@ cordova 基础插件已经添加，包括相机、图库、文件等
  1. quasar mode -a cordova
  2. quasar dev -m cordova -T android # 在手机上本地调试
  3. 使用 quasar build -m cordova -T android  命令生成并签名
- 4. 如果app使用热更新(apk) 请先执行cordova-hcp build命令 然后执行cordova build --release android 命令
 
 ```
-quasar build -m cordova -T ios 
+
+quasar build -m cordova -T ios
 
 ## 热更新
 
-1. 安装 npm install -g cordova-hot-code-push-cli
-2. 修改 config.xml 和 cordova-hcp.json 中服务器地址
-3. 执行 quasar build -m cordova -T android 
-4. 在 cordova 项目中执行 cordova-hcp build
-5. 将 cordova 项目下的 www 文件夹放到服务器中
+1. 全局安装 codepush
+
+```
+npm install -g code-push-cli
+
+```
+
+2. 创建一个 CodePush 的云账户，登录账号
+
+```
+code-push register
+
+```
+
+3. 创建 CodePush 应用，记录测试环境和正式环境的 key
+
+```
+code-push app add quasar_app_android android cordova  # quasar_app_android 为项目名称, android 为平台名称，iOS和安卓要分开创建并保存key。可以通过code-push deployment list quasar_app_android -k 查看key
+
+```
+
+4. 添加插件
+
+```
+cordova plugin add cordova-plugin-code-push@latest
+
+```
+
+5. 配置 config.xml
+
+```
+<platform name="android">
+    <preference name="CodePushDeploymentKey" value="YOUR-ANDROID-DEPLOYMENT-KEY" />
+</platform>
+<platform name="ios">
+    <preference name="CodePushDeploymentKey" value="YOUR-IOS-DEPLOYMENT-KEY" />
+</platform>
+
+查看是否安装了cordova-plugin-whitelist ，如果没有则安装,然后添加
+<access origin="*" /> 或者
+<access origin="https://codepush.appcenter.ms" />
+<access origin="https://codepush.blob.core.windows.net" />
+<access origin="https://codepushupdates.azureedge.net" />
+
+```
+
+6. 确保你的应用程序可以访问 CodePush 服务器,在 index.html 文件添加
+
+```
+<meta http-equiv="Content-Security-Policy" content="default-src https://codepush.appcenter.ms 'self' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *" /> 到head里面
+
+```
+
+7. 添加检测更新代码
+
+```
+    document.addEventListener('deviceready', function () {
+      codePush.sync()
+    }, false)
+    document.addEventListener("resume", function () {
+      codePush.sync()
+    })
+
+```
+
+8. 正常编译项目
+
+```
+quasar build -m cordova -T android
+
+```
+
+9. 发布更新
+
+```
+code-push release-cordova quasar_app_android android -d "Production"  -m --des "更新描述"  #默认是打包Staging环境的
+# -m : 表示是否强制更新
+```
+
+10. 查看记录和删除
+
+```
+ code-push deployment clear quasar_app Production # 删除正式环境已发布记录
+
+ code-push deployment ls quasar_app # 查看记录
+
+```
+
+文档地址：https://github.com/Microsoft/cordova-plugin-code-push
 
 ## 项目结构
 
@@ -128,5 +212,3 @@ ImagePickerPlugins.getPictures().then(v => {
 ### 其他
 
 1. app 在线升级
-2. 热更新
-3. iphone x 适配
