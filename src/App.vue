@@ -7,6 +7,7 @@
 <script>
 import exitApp from './plugins/exitAppServices'
 import { Platform } from 'quasar'
+import common from './plugins/upgradeService'
 
 export default {
   name: 'App',
@@ -21,7 +22,9 @@ export default {
       document.addEventListener("resume", function () {
         codePush.sync()
       }, false)
+
     }
+    common.updated("https://appdown.xxxxx.xml"); // app 升级
   }
 }
 </script>

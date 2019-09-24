@@ -202,6 +202,17 @@ ImagePickerPlugins.getPictures().then(v => {
 }
 ```
 
+4. app 在线升级
+
+```
+
+import common from './plugins/upgradeService'
+
+common.updated("https://appdown.xxxxx.xml") // 升级
+common.getVersion() // 获取APP版本号
+
+```
+
 ### 调试
 
 1. 浏览器中调试

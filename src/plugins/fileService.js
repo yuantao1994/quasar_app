@@ -1,4 +1,10 @@
 import config from 'app/src/config/config'
+import {
+    Dialog,
+    Loading,
+    QSpinnerTail
+} from 'quasar'
+
 /**
  * 文件上传服务
  * cordova plugin add cordova-plugin-file-transfer
@@ -114,17 +120,22 @@ export default class FileService {
      * 文件下载并打开
      * cordova plugin add cordova-plugin-file-opener2
      * @param {any} url
-     * @param {any} suffix
      * @memberof FileService
      */
-    download(url, name, suffix) {
+    downloadAndOpenFile(url, name, isShowprogress) {
+        let dialog;
+        if (isShowprogress) {
+            dialog = Dialog.create({
+                title: '下载中',
+                message: '下载进度：0%',
+                ok: '',
+                persistent: true
+            })
+        }
         return new Promise((reslove, reject) => {
             url = encodeURI(url)
             let fileType = this.getFileType(name)
-                //    let filePath = cordova.file.dataDirectory + '/' + new Date().getTime() + '.' + fileType // 文件本地路径
-
-            let filePath = cordova.file.dataDirectory + '/' + name // 文件本地路径
-
+            let filePath = cordova.file.externalDataDirectory + name;
             let fileTransfer = new FileTransfer()
             fileTransfer.download(
                 url,
@@ -132,35 +143,38 @@ export default class FileService {
                 entry => {
                     let mime = this.getFileMimeType(fileType)
                     console.log('mime:' + mime)
-                    console.log('openfileParh:' + entry.nativeURL)
-                    cordova.plugins.fileOpener2.open(entry.nativeURL, mime, {
+                    console.log('openfileParh:' + entry.toURL())
+                    cordova.plugins.fileOpener2.open(entry.toURL(), mime, {
                         error: r => {
-                            reslove('打开文件失败')
+                            if (dialog)
+                                dialog.hide();
+                            reject('打开文件失败')
                             console.log('打开文件失败' + JSON.stringify(r))
                         },
                         success: e => {
+                            if (dialog)
+                                dialog.hide();
                             reject('打开文件成功')
                             console.log('打开文件成功' + JSON.stringify(e))
                         }
                     })
-                    console.log(
-                        'download accessory successful. accessory information : ' +
-                        JSON.stringify(entry)
-                    )
                 },
                 error => {
+                    if (dialog)
+                        dialog.hide();
                     reject('文件下载失败')
-                    console.error(
-                        'download accessory fail. Because of : ' + JSON.stringify(error)
-                    )
                 }
             )
 
             fileTransfer.onprogress = function(event) {
                 let num = Math.floor((event.loaded / event.total) * 100)
-                if (num === 100) {} else {
-                    /*  let title = document.getElementsByClassName('alert-title')[0]
-        if (!isBack) title && (title.innerHTML = '下载进度：' + num + '%') */
+                if (num === 100) {
+                    if (dialog)
+                        dialog.hide();
+                } else {
+                    let title = document.getElementsByClassName('q-dialog__message')[0]
+                    if (title)
+                        title.innerHTML = '下载进度：' + num + '%'
                 }
             }
         })
@@ -176,6 +190,9 @@ export default class FileService {
         let mimeType = ''
 
         switch (fileType) {
+            case "apk":
+                mimeType = "application/vnd.android.package-archive";
+                break;
             case 'txt':
                 mimeType = 'text/plain'
                 break

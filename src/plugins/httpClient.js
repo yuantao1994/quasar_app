@@ -30,13 +30,13 @@ function handlerSuccessResponse(response) {
             if (response.data instanceof Object) {
                 resolve(response.data)
             } else {
-                let data = JSON.parse(response.data)
+                let data = JSON.parse(response.data.trim())
                 console.log(response.data.message)
                 resolve(data)
             }
         } catch (e) {
             console.error('JSON parsing error')
-            reject(response.data)
+            resolve(response.data.trim())
         }
     })
 }
@@ -105,6 +105,11 @@ function handlerFailResponse(response) {
         reject(msg)
     })
 }
+
+
+
+
+
 
 export default class HttpClent {
     /**
